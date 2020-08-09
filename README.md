@@ -1,4 +1,4 @@
-# Readme File for Assignment for Session 3 - Numeric Types
+# Readme File for Assignment for Session 4 - Numeric Types
 ### Created by Sriram Iyengar
 ## This assignment is for testing our understaning of Session3 
 - Integer Data Types

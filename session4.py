@@ -1,96 +1,88 @@
-def encoded_from_base10(number, base, digit_map):
+import random
+class Qualean:
     '''
-    This function returns a string encoding in the "base" for the the "number" using the "digit_map"
-    Conditions that this function must satisfy:
-    - 2 <= base <= 36 else raise ValueError
-    - invalid base ValueError must have relevant information
-    - digit_map must have sufficient length to represent the base
-    - must return proper encoding for all base ranges between 2 to 36 (including)
-    - must return proper encoding for all negative "numbers" (hint: this is equal to encoding for +ve number, but with - sign added)
-    - the digit_map must not have any repeated character, else ValueError
-    - the repeating character ValueError message must be relevant
-    - you cannot use any in-built functions in the MATH module
-
-    '''
-    if base < 2 or base > 36:
-        raise ValueError('invalid value for base, allowed values 2 <= base <= 36')
-
-    if len(digit_map) != base:
-        raise ValueError('Number of elements in the digit_map must be equal to base')
-
-    if len(set(digit_map)) != base:   # set command returns only unique values
-        raise ValueError('The elements of digit_map are repeating ')
-
-    sign = 1 if number >= 0 else -1
-    unsigned_number = number * sign
-    encod_index = []
-    if unsigned_number is 0:
-        encod_index = [0]
-    while unsigned_number != 0:
-        encod_index.insert(0, unsigned_number % base)
-        unsigned_number = unsigned_number // base
-
-    encod_num = ''.join([digit_map[i] for i in encod_index])
-    sign_char = '' if sign == 1 else '-'
-    encod_num = sign_char + encod_num
-    return encod_num
-
-def float_equality_testing(a, b):
-    '''
-        This function emulates the ISCLOSE method from the MATH module, but you can't use this function
-        We are going to assume:
-        - rel_tol = 1e-12
-        - abs_tol = 1e-05
-    '''
-    rel_tol = 1e-12
-    abs_tol = 1e-05
-    tol=max(rel_tol * max(abs(a), abs(b)), abs_tol)
-    output=abs(a-b)<= abs(a - b) <= tol
-    return output
-
-
-def manual_truncation_function(f_num):
-    '''
-    This function emulates python's MATH.TRUNC method. It ignores everything after the decimal point. 
-    It must check whether f_num is of correct type before proceed. You can use inbuilt constructors like int, float, etc
-    # Input is f_num
-    # Output is given as truncated floating number
+        Write a Qualean class that is inspired by Boolean+Quantum concepts.
+        We can assign it only 3 possible real states. True, False, and Maybe (1, 0, -1)
+        but it internally picks an imaginary state. The moment you assign it a real number,
+        it immediately finds an imaginary number random.uniform(-1, 1) and multiplies with
+        it and stores that number internally after using Bankers rounding to 10th decimal place
     '''
 
-    if not isinstance(f_num, float):
-        raise ValueError('f_num must be of type float')
-    if f_num >= 0:
-        return f_num // 1
-    else:
-        return f_num // 1 + 1
+    def __init__(self,q):
+        if (q !=0 and q !=1 and q !=-1):
+            raise ValueError('You can assign it only 3 possible real states. True, False, and Maybe (1, 0, -1)')
+        self.q = round(q*random.uniform(-1, 1),10)
 
-
-def manual_rounding_function(f_num):
-    '''
-    This function emulates python's inbuild ROUND function. You are not allowed to use ROUND function, but
-    expected to write your one manually.
-    ## Input is f_num
-    ## Output is rounded number
-    '''
-    f1 = manual_truncation_function(f_num)
-    if f_num >= 0:
-        if (f_num - f1) >= 0.50:
-            f_num = f1 + 1
+    def __and__(self , other):
+        if isinstance(other, Qualean):
+            if self.__bool__==True and other.__bool__==True:
+                    return True
+            else:
+                return False
         else:
-                f_num = f1
-    else:
-        if (f_num - f1) <= -0.50:
-            f_num = f1 - 1
-        else:
-            f_num = f1
-    return f_num
+            return  False
 
-def rounding_away_from_zero(f_num):
-    '''
-    #### This Function is Not Implemented#####
-    This function implements rounding away from zero as covered in the class
-    Desperately need to use INT constructor? Well you can't. 
-    Hint: use FRACTIONS and extract numerator. 
-    '''
-    from fractions import Fraction
-    return 3.0
+    def __or__(self, other):
+        if isinstance(other, Qualean):
+            return Qualean(int(self) | int(other))
+        else:
+            return self.__or__(self, other)
+
+    def __repr__(self):
+        return 'Qualean={0}'.format(self.q)
+
+    def __str__(self):
+        return 'Qualean={0}'.format(self.q)
+
+    def __add__(self, other):
+        if isinstance(other, Qualean):
+            return float(self.q) + float(other.q)
+        else:
+            raise NotImplementedError()
+
+    def __eq__(self, other):
+        return float(self.q) == float(other.q)
+
+    def __float__(self):
+        return float(self.q)
+
+    def __ge__(self, other):
+        if isinstance(other, Qualean):
+            return float(self.q) >= float(other.q)
+        else:
+            raise NotImplementedError()
+
+    def __gt__(self, other):
+        if isinstance(other, Qualean):
+            return float(self.q) > float(other.q)
+        else:
+            raise NotImplementedError()
+
+    def __invertsign__(self):
+        return -1*self.q
+
+    def __le__(self, other):
+        if isinstance(other, Qualean):
+            return float(self.q) <= float(other.q)
+        else:
+            raise NotImplementedError()
+
+    def __lt__(self, other):
+        if isinstance(other, Qualean):
+            return float(self.q) < float(other.q)
+        else:
+            raise NotImplementedError()
+
+    def __mul__(self, other):
+        return float(self.q) * float(other.q)
+
+    def __sqrt__(self):
+        if self.q>=0:
+            return float(self.q)**0.5
+        else:
+            return '{0}i' .format(float(-1*self.q)**0.5)
+
+    def __bool__(self):
+        if float(self.q) != 0:
+            return True
+        return False
