@@ -1,12 +1,16 @@
 import pytest
 import random
 import string
+import pytest
+
+from  session4 import Qualean
 import session4
 import os
 import inspect
 import re
 import math
 import random
+import decimal
 from decimal import Decimal
 
 states = [1, 0, -1]
@@ -69,42 +73,31 @@ def test_function_name_had_cap_letter():
     for function in functions:
         assert len(re.findall('([A-Z])', function[0])) == 0, "You have used Capital letter(s) in your function names"
 
-
 def test_function_100times_eq_100q():
-    TEST_100times= True
-    q = q1 = session4.Qualean((random.choice(states)))
-    q = 100 * float(q)
-    for x in range(101):
-        q1 = q1 + q1
-    else:
-        if math.isclose(q, q1):
-            TEST_million = False
+    q1 = Qualean(random.choice(states))
+    new_q = Qualean(0)
+    for _ in range(100):
+        new_q += q1.q
 
-    assert TEST_100times == True, 'Check'
+    assert math.isclose(new_q, q1 * 100, rel_tol=1e-4)
 
 def test_function_decimal_sqrt_check():
-    q = session4.Qualean(random.choice([1,0]))
-    TEST_decimal = True
-    if float(q) >= 0:
-        q1 =round((q.__sqrt__()),10)
-        print(q1)
-        q2=float(q)
-        q2=round((Decimal(q2).sqrt()),10)
-        print(q2)
-        if math.isclose(q1, q2,rel_tol=0.01):
-            TEST_decimal = False
+    q1 = Qualean(1)
+    if q1 >= 0:
+        with decimal.localcontext() as ctx:
+            ctx.prec = 10
+            ctx.rounding = decimal.ROUND_HALF_EVEN
+            assert q1.__sqrt__() == Decimal(str(q1)).sqrt(context=ctx)
     else:
-        TEST_decimal = False
-
-    assert TEST_decimal == True, 'Check'
+        assert True
 
 def test_function_sum_million_q_eq_zero():
     q1 = 0
     TEST_million = True
     for x in range(100001):
         q = random.choice(states)
-        q = session4.Qualean(q)
-        q1 = q1 + float(q)
+        q = Qualean(q)
+        q1 = q1 + q.q
         print(q1)
     else:
         if  math.isclose(q1, 0):
@@ -113,10 +106,82 @@ def test_function_sum_million_q_eq_zero():
     assert TEST_million== True, 'Check'
 
 def test_function_q1_false_and_q2_not_defined():
-    q1=q2=session4.Qualean(1)
-    assert q1.__and__(q2)!= True, "check"
-
+    q1 = Qualean(0)
+    assert not bool(q1 and q2)
 
 def test_function_q1_True_or_q2_not_defined():
-    q1=session4.Qualean(0)
-    assert q1.__or__(q2)!= True, "check"
+    q1 = Qualean(1)
+    assert bool(q1 or q2)
+
+def test_function_Multiplication_mul():
+    q1 = Qualean(random.choice(states))
+    q2 = Qualean(0)
+    assert q1 * q2 == 0
+
+def test_function_invertsign():
+    q1 = Qualean(random.choice(states))
+    if q1 != 0:
+        assert q1.__invertsign__() == -q1.q
+    else:
+        assert q1==0
+
+def test_function_float_conversion():
+    q1 = Qualean(random.choice(states))
+    assert isinstance(q1.__float__(), float)
+
+def test_function_greater():
+    assert Qualean(-1) + 1 > Qualean(1)
+
+def test_function_greater_than_equal_to():
+    assert Qualean(-1) + 1 >= Qualean(-1)
+
+def test_function_lesser_than():
+    assert Qualean(-1) < Qualean(-1) + 1
+
+def test_function_less_than_equal_to():
+    assert Qualean(-1) <= Qualean(-1) + 1
+
+def test_function_equality_true():
+    q1 = Qualean(random.choice(states))
+    assert q1 == q1
+
+def test_function_equality_false():
+    q1 = Qualean(1)
+    q2 = Qualean(0)
+    assert not q1 == q2
+
+def test_function_qualean_bool():
+    q1 = Qualean(1)
+    assert bool(q1)
+    q1 = Qualean(0)
+    assert not bool(q1)
+
+def test_function_valid_input():
+    q1 = Qualean(random.choice(states))
+    assert isinstance(q1, Qualean)
+
+def test_function_invalid_integer_input():
+    with pytest.raises(ValueError) as execinfo:
+        _ = Qualean(2)
+    assert "ValueError" in str(execinfo)
+
+
+def test_function_repr():
+    assert "object at" not in Qualean(random.choice(states)).__repr__()
+
+
+def test_function_str():
+    assert "object at" not in Qualean(random.choice(states)).__str__()
+
+
+def test_function_add():
+    q1 = Qualean(random.choice(states))
+    q2 = Qualean(random.choice(states))
+    assert math.isclose(q1.__add__(q2), q1.q+q2.q, rel_tol=1e-8 )
+
+
+def test_function_bool():
+    q1 = Qualean(1)
+    assert bool(q1)
+    q1 = Qualean(0)
+    assert not bool(q1)
