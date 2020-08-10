@@ -1,6 +1,7 @@
 import random
 import decimal
 from decimal import Context
+from decimal import Decimal
 import cmath
 
 global_ctx = Context(prec=10, rounding=decimal.ROUND_HALF_EVEN, clamp=1)

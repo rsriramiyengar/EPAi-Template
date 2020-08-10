@@ -83,13 +83,21 @@ def test_function_100times_eq_100q():
 
 def test_function_decimal_sqrt_check():
     q1 = Qualean(1)
-    if q1 >= 0:
+    Decimal_Test=False
+    print(Decimal_Test)
+    if q1.q >= 0:
         with decimal.localcontext() as ctx:
             ctx.prec = 10
             ctx.rounding = decimal.ROUND_HALF_EVEN
-            assert q1.__sqrt__() == Decimal(str(q1)).sqrt(context=ctx)
+            if  q1.__sqrt__() == Decimal(str(q1)).sqrt(context=ctx):
+                Decimal_Test=True
+                pass
+            else:
+                pass
     else:
-        assert True
+        Decimal_Test= True
+    print(Decimal_Test)
+    assert Decimal_Test == True, "Check your the function"
 
 def test_function_sum_million_q_eq_zero():
     q1 = 0
