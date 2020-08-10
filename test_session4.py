@@ -110,7 +110,6 @@ def test_function_sum_million_q_eq_zero():
     else:
         if  math.isclose(q1, 0):
             TEST_million=False
-
     assert TEST_million== True, 'Check'
 
 def test_function_q1_false_and_q2_not_defined():
@@ -138,16 +137,20 @@ def test_function_float_conversion():
     assert isinstance(q1.__float__(), float)
 
 def test_function_greater():
-    assert Qualean(-1) + 1 > Qualean(1)
+    q1 = Qualean(random.choice(states))
+    assert q1 + 1 > q1
 
 def test_function_greater_than_equal_to():
-    assert Qualean(-1) + 1 >= Qualean(-1)
+    q1 = Qualean(random.choice(states))
+    assert q1 + 1 >= q1
 
 def test_function_lesser_than():
-    assert Qualean(-1) < Qualean(-1) + 1
+    q1 = Qualean(random.choice(states))
+    assert q1 < q1 + 1
 
 def test_function_less_than_equal_to():
-    assert Qualean(-1) <= Qualean(-1) + 1
+    q1 = Qualean(random.choice(states))
+    assert q1 <= q1 + 1
 
 def test_function_equality_true():
     q1 = Qualean(random.choice(states))
