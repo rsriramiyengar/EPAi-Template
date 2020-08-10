@@ -22,7 +22,7 @@
     it and stores that number internally after using Bankers rounding to 10th decimal place
     '''
 
-### for  __and__ and __or__
+### for  __and__ & __or__
   - This is not implemented as it is a `bitwise &` operation not the `logical and` operation and the base datatype is of `Decimal` class.
     A rejected PEP-335 (https://www.python.org/dev/peps/pep-0335/) does not allow the overloading of `logical and` operator.
 
