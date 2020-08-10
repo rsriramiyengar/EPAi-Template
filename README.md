@@ -136,6 +136,9 @@
 ### test_function_bool 
 - checks bool  function in assignment
 
+***
+> ![My Image](https://github.com/rsriramiyengar/EPAi-session4-rsriramiyengar/blob/master/images/Image01.JPG)
+***
 
 We are using python >3.8.3
 
